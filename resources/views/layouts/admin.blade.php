@@ -11,7 +11,13 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-[#0b0f19] font-sans antialiased text-white flex min-h-screen border-t-8 border-[#8b5cf6]">
+<body class="bg-[#0b0f19] font-sans antialiased text-white flex min-h-screen border-t-8 border-[#8b5cf6] relative">
+
+    <!-- Global Page Loading Top Indicator -->
+    <div id="global-page-loader" class="hidden fixed top-4 right-4 z-50 brutal-card bg-[#8b5cf6] text-white px-5 py-3 border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center gap-3 font-black text-xs uppercase animate-bounce">
+        <svg class="w-5 h-5 animate-spin text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        <span>⚡ MEMUAT DATA ADMIN...</span>
+    </div>
 
     <!-- Sidebar Navigation -->
     <aside class="w-64 bg-[#111827] text-white flex-shrink-0 flex flex-col justify-between hidden md:flex min-h-screen border-r-5 border-black shadow-[6px_0px_0px_0px_rgba(0,0,0,1)]">
@@ -108,5 +114,27 @@
             @yield('content')
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loader = document.getElementById('global-page-loader');
+
+            document.querySelectorAll('a[href]:not([target="_blank"]):not([href^="#"]):not([href^="javascript:"])').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (loader && !e.ctrlKey && !e.metaKey) {
+                        loader.classList.remove('hidden');
+                    }
+                });
+            });
+
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function() {
+                    if (loader) {
+                        loader.classList.remove('hidden');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

@@ -38,12 +38,11 @@ class GoogleDriveController extends Controller
     public function sync(Request $request)
     {
         try {
-            Artisan::call('gallery:sync');
-            $output = Artisan::output();
+            \App\Jobs\SyncGalleryJob::dispatchSync();
 
-            return back()->with('success', 'Proses sinkronisasi Google Drive berhasil dijalankan! ' . $output);
+            return back()->with('success', 'Proses sinkronisasi Google Drive berhasil dijalankan!');
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal menjalankan sinkronisasi: ' . $e->getMessage());
+            return back()->with('error', 'Gagal memulai sinkronisasi: ' . $e->getMessage());
         }
     }
 }

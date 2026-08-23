@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Album;
 use App\Models\Media;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class GalleryController extends Controller
@@ -15,11 +16,15 @@ class GalleryController extends Controller
         $type = $request->input('type'); // 'image', 'video' or null
         $year = $request->input('year');
 
+        // Limit per_page parameter between 10 and 50 to prevent database overload
+        $perPage = min(max((int) $request->input('per_page', 20), 10), 50);
+
         $query = Media::where('is_visible', true)
             ->whereHas('album', function ($q) {
                 $q->where('is_visible', true);
             })
-            ->with('album');
+            ->select(['id', 'album_id', 'google_drive_id', 'name', 'mime_type', 'type', 'thumbnail_url', 'drive_url', 'captured_at'])
+            ->with('album:id,name,slug');
 
         if ($search) {
             $query->where('name', 'like', '%' . $search . '%');
@@ -39,9 +44,9 @@ class GalleryController extends Controller
             $query->whereYear('captured_at', $year);
         }
 
-        $mediaList = $query->latest('captured_at')->paginate(16)->withQueryString();
+        $mediaList = $query->latest('captured_at')->paginate($perPage)->withQueryString();
 
-        $albums = Album::where('is_visible', true)->orderBy('name')->get();
+        $albums = Album::where('is_visible', true)->select(['id', 'name', 'slug'])->orderBy('name')->get();
 
         // Get available years for filter (driver compatible)
         $driver = config('database.connections.' . config('database.default') . '.driver', 'mysql');
@@ -55,19 +60,17 @@ class GalleryController extends Controller
             ->filter()
             ->sortDesc();
 
-
-        $siteName = \App\Models\Setting::get('site_name', 'Gallery Kelas');
+        $siteName = Setting::get('site_name', 'D3 MI PNB');
 
         return view('gallery', compact(
-            'siteName',
             'mediaList',
             'albums',
             'years',
             'search',
             'albumSlug',
             'type',
-            'year'
+            'year',
+            'siteName'
         ));
     }
 }
-

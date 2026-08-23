@@ -14,6 +14,9 @@ class MemberController extends Controller
         $className = $request->input('class');
         $generation = $request->input('generation');
 
+        // Limit per_page parameter between 12 and 50 to prevent database overload
+        $perPage = min(max((int) $request->input('per_page', 24), 12), 50);
+
         $query = Member::approved()->visible();
 
         if ($search) {
@@ -32,7 +35,8 @@ class MemberController extends Controller
             $query->where('generation', $generation);
         }
 
-        $members = $query->orderBy('name', 'asc')->paginate(12)->withQueryString();
+        $members = $query->orderBy('name', 'asc')->paginate($perPage)->withQueryString();
+
 
         // Get filter dropdown options
         $classes = Member::approved()->visible()->distinct()->pluck('class_name')->filter()->sort();

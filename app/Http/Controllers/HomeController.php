@@ -5,19 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use App\Models\Media;
 use App\Models\Setting;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $siteName = Setting::get('site_name', 'Gallery Kelas - Web Documentation');
-        $siteDesc = Setting::get('site_description', 'Dokumentasi kenangan, foto, dan video kegiatan kelas tersimpan rapi dan aman di Google Drive.');
+        $siteName = Setting::get('site_name', 'D3 Manajemen Informatika PNB');
+        $siteDesc = Setting::get('site_description', 'Dokumentasi Resmi Kelas D3 Manajemen Informatika (MI) Politeknik Negeri Bali.');
         $logoUrl = Setting::get('logo_url', null);
 
-        $albumsCount = Album::where('is_visible', true)->count();
-        $photosCount = Media::where('is_visible', true)->where('type', 'image')->count();
-        $videosCount = Media::where('is_visible', true)->where('type', 'video')->count();
+        // Cache statistics counts for 15 minutes to eliminate SQL counts on every page load
+        $stats = Cache::remember('home_stats', 900, function () {
+            return [
+                'albumsCount' => Album::where('is_visible', true)->count(),
+                'photosCount' => Media::where('is_visible', true)->where('type', 'image')->count(),
+                'videosCount' => Media::where('is_visible', true)->where('type', 'video')->count(),
+            ];
+        });
+
+        $albumsCount = $stats['albumsCount'];
+        $photosCount = $stats['photosCount'];
+        $videosCount = $stats['videosCount'];
 
         $recentAlbums = Album::where('is_visible', true)
             ->withCount(['visibleMedia as photos_count' => fn($q) => $q->where('type', 'image')])
@@ -27,7 +36,8 @@ class HomeController extends Controller
             ->get();
 
         $recentMedia = Media::where('is_visible', true)
-            ->with('album')
+            ->select(['id', 'album_id', 'google_drive_id', 'name', 'mime_type', 'type', 'thumbnail_url', 'drive_url'])
+            ->with('album:id,name,slug')
             ->latest()
             ->take(8)
             ->get();

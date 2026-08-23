@@ -16,8 +16,7 @@ class Setting extends Model
 
     public static function get(string $key, ?string $default = null): ?string
     {
-        $setting = static::where('key', $key)->first();
-        return $setting ? $setting->value : $default;
+        return app(\App\Services\SettingService::class)->get($key, $default);
     }
 
     public static function set(string $key, ?string $value): void
@@ -26,5 +25,7 @@ class Setting extends Model
             ['key' => $key],
             ['value' => $value]
         );
+        app(\App\Services\SettingService::class)->clearCache();
     }
 }
+

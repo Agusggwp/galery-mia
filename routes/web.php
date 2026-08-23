@@ -27,7 +27,10 @@ Route::get('/anggota/{slug}', [MemberController::class, 'show'])->name('members.
 
 // Public Member Joining Form Routes
 Route::get('/join/{token}', [MemberFormController::class, 'show'])->name('member.join');
-Route::post('/join/{token}', [MemberFormController::class, 'store'])->name('member.join.store');
+Route::post('/join/{token}', [MemberFormController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('member.join.store');
+
 
 // Media Proxy & Thumbnail Streaming Routes
 Route::get('/media/{id}/thumbnail', [MediaStreamController::class, 'thumbnail'])->name('media.thumbnail');
