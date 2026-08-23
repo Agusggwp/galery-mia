@@ -62,14 +62,15 @@
 
                 <!-- Member Cards Slider Container -->
                 <div class="relative overflow-hidden p-2">
-                    <div id="member-slider" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 transition-all duration-500 transform">
+                    <div id="member-slider" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 items-stretch transition-all duration-500 transform">
                         @foreach($randomMembers as $member)
-                            <div class="member-slide-item">
+                            <div class="member-slide-item h-full">
                                 <x-member-card :member="$member" />
                             </div>
                         @endforeach
                     </div>
                 </div>
+
             </div>
 
             <script>
