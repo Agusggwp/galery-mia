@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Album;
 use App\Models\Media;
+use App\Models\Member;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 
@@ -15,7 +16,7 @@ class HomeController extends Controller
         $siteDesc = Setting::get('site_description', 'Dokumentasi Resmi Kelas D3 Manajemen Informatika (MI) Politeknik Negeri Bali.');
         $logoUrl = Setting::get('logo_url', null);
 
-        // Cache statistics counts for 15 minutes to eliminate SQL counts on every page load
+        // Cache statistics counts for 15 minutes
         $stats = Cache::remember('home_stats', 900, function () {
             return [
                 'albumsCount' => Album::where('is_visible', true)->count(),
@@ -42,6 +43,9 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
+        // Fetch random approved members for homepage rotating highlight
+        $randomMembers = Member::approved()->visible()->inRandomOrder()->take(8)->get();
+
         return view('home', compact(
             'siteName',
             'siteDesc',
@@ -50,7 +54,8 @@ class HomeController extends Controller
             'photosCount',
             'videosCount',
             'recentAlbums',
-            'recentMedia'
+            'recentMedia',
+            'randomMembers'
         ));
     }
 }

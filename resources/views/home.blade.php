@@ -35,34 +35,101 @@
                         ⚡ DASHBOARD ADMIN
                     </a>
                 @endauth
-            </div>
-        </div>
+        <!-- Random Alternating Class Members Highlight Section -->
+        @if(isset($randomMembers) && $randomMembers->isNotEmpty())
+            <div class="mt-16 max-w-5xl mx-auto space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b-3 border-black">
+                    <div class="flex items-center gap-3">
+                        <span class="w-3 h-3 bg-[#f59e0b] rounded-full animate-ping"></span>
+                        <span class="brutal-badge bg-[#8b5cf6] text-white text-xs font-black">
+                            👥 ANGGOTA KELAS (ACAK & BERGANTIAN)
+                        </span>
+                    </div>
 
-        <!-- Counter Statistics Grid -->
-        <div class="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <div class="brutal-card brutal-card-slate p-6 text-center">
-                <div class="text-5xl font-black text-[#8b5cf6]">
-                    {{ number_format($albumsCount) }}
+                    <div class="flex items-center gap-2">
+                        <button id="member-prev-btn" class="brutal-btn brutal-btn-slate px-3 py-1.5 text-xs font-black">
+                            &larr; PREV
+                        </button>
+                        <button id="member-next-btn" class="brutal-btn brutal-btn-amber px-3 py-1.5 text-xs font-black">
+                            NEXT &rarr;
+                        </button>
+                        <a href="{{ route('members.index') }}" class="brutal-btn brutal-btn-primary px-4 py-1.5 text-xs font-black">
+                            SEMUA ANGGOTA &rarr;
+                        </a>
+                    </div>
                 </div>
-                <div class="text-xs uppercase tracking-wider font-black text-white mt-2">ALBUM DOKUMENTASI</div>
+
+                <!-- Member Cards Slider Container -->
+                <div class="relative overflow-hidden p-2">
+                    <div id="member-slider" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 transition-all duration-500 transform">
+                        @foreach($randomMembers as $member)
+                            <div class="member-slide-item">
+                                <x-member-card :member="$member" />
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
 
-            <div class="brutal-card brutal-card-slate p-6 text-center">
-                <div class="text-5xl font-black text-[#f59e0b]">
-                    {{ number_format($photosCount) }}
-                </div>
-                <div class="text-xs uppercase tracking-wider font-black text-white mt-2">FOTO KENANGAN</div>
-            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const slider = document.getElementById('member-slider');
+                    const items = document.querySelectorAll('.member-slide-item');
+                    if (!slider || items.length === 0) return;
 
-            <div class="brutal-card brutal-card-slate p-6 text-center">
-                <div class="text-5xl font-black text-[#3b82f6]">
-                    {{ number_format($videosCount) }}
-                </div>
-                <div class="text-xs uppercase tracking-wider font-black text-white mt-2">VIDEO ACTIVITIES</div>
-            </div>
-        </div>
+                    let currentIndex = 0;
+                    
+                    function getItemsPerPage() {
+                        if (window.innerWidth < 640) return 1;
+                        if (window.innerWidth < 768) return 2;
+                        return 4;
+                    }
+
+                    function updateSlider() {
+                        const itemsPerPage = getItemsPerPage();
+                        const totalPages = Math.ceil(items.length / itemsPerPage);
+                        if (currentIndex >= totalPages) currentIndex = 0;
+
+                        items.forEach((item, idx) => {
+                            if (idx >= currentIndex * itemsPerPage && idx < (currentIndex + 1) * itemsPerPage) {
+                                item.style.display = 'block';
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        });
+                    }
+
+                    document.getElementById('member-next-btn')?.addEventListener('click', function() {
+                        const totalPages = Math.ceil(items.length / getItemsPerPage());
+                        currentIndex = (currentIndex + 1) % totalPages;
+                        updateSlider();
+                    });
+
+                    document.getElementById('member-prev-btn')?.addEventListener('click', function() {
+                        const totalPages = Math.ceil(items.length / getItemsPerPage());
+                        currentIndex = (currentIndex - 1 + totalPages) % totalPages;
+                        updateSlider();
+                    });
+
+                    // Auto rotate every 4 seconds
+                    setInterval(function() {
+                        const totalPages = Math.ceil(items.length / getItemsPerPage());
+                        if (totalPages > 1) {
+                            currentIndex = (currentIndex + 1) % totalPages;
+                            updateSlider();
+                        }
+                    }, 4000);
+
+                    updateSlider();
+                    window.addEventListener('resize', updateSlider);
+                });
+            </script>
+        @endif
     </div>
 </section>
+
+
 
 <!-- Recent Albums Section -->
 <section class="py-20 bg-[#0b0f19]">
