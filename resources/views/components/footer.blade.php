@@ -23,8 +23,9 @@
                 <ul class="space-y-3 font-black text-xs uppercase">
                     <li><a href="{{ route('home') }}" class="hover:text-[#8b5cf6] transition-colors flex items-center gap-2"><span>&rarr;</span> Beranda Utama</a></li>
                     <li><a href="{{ route('gallery') }}" class="hover:text-[#8b5cf6] transition-colors flex items-center gap-2"><span>&rarr;</span> Galeri Media</a></li>
-                    <li><a href="{{ route('login') }}" class="hover:text-[#8b5cf6] transition-colors flex items-center gap-2"><span>&rarr;</span> Panel Admin</a></li>
+                    <li><a href="{{ route('members.index') }}" class="hover:text-[#8b5cf6] transition-colors flex items-center gap-2"><span>&rarr;</span> Anggota Kelas</a></li>
                 </ul>
+
             </div>
 
             <!-- Cloud Integration Notice -->

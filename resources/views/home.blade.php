@@ -30,11 +30,8 @@
                 <a href="{{ route('gallery') }}" class="brutal-btn brutal-btn-primary px-8 py-4 text-base">
                     🚀 JELAJAHI GALERI MEDIA
                 </a>
-                @auth
-                    <a href="{{ route('admin.dashboard') }}" class="brutal-btn brutal-btn-amber px-8 py-4 text-base">
-                        ⚡ DASHBOARD ADMIN
-                    </a>
-                @endauth
+            </div>
+
         <!-- Random Alternating Class Members Highlight Section -->
         @if(isset($randomMembers) && $randomMembers->isNotEmpty())
             <div class="mt-16 max-w-5xl mx-auto space-y-6">

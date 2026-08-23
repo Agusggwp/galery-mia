@@ -31,16 +31,6 @@
                 <a href="{{ route('members.index') }}" class="px-3.5 py-2 border-3 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all {{ request()->routeIs('members.*') ? 'bg-[#8b5cf6] text-white' : 'bg-[#1f2937] text-white hover:bg-[#374151]' }}">
                     ANGGOTA KELAS
                 </a>
-
-                @auth
-                    <a href="{{ route('admin.dashboard') }}" class="brutal-btn brutal-btn-amber px-4 py-2 text-xs">
-                        ⚡ ADMIN PANEL
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" class="brutal-btn brutal-btn-slate px-4 py-2 text-xs">
-                        🔑 LOGIN ADMIN
-                    </a>
-                @endauth
             </nav>
 
             <!-- Mobile Menu Toggle Button -->
@@ -55,11 +45,6 @@
         <a href="{{ route('home') }}" class="block py-2 hover:text-[#8b5cf6]">BERANDA</a>
         <a href="{{ route('gallery') }}" class="block py-2 hover:text-[#8b5cf6]">GALERI MEDIA</a>
         <a href="{{ route('members.index') }}" class="block py-2 hover:text-[#8b5cf6]">ANGGOTA KELAS</a>
-        @auth
-            <a href="{{ route('admin.dashboard') }}" class="block py-2 text-[#f59e0b]">⚡ ADMIN PANEL</a>
-        @else
-            <a href="{{ route('login') }}" class="block py-2 text-gray-300">🔑 LOGIN ADMIN</a>
-        @endauth
     </div>
 </header>
 
