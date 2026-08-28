@@ -3,32 +3,41 @@
 @section('title', 'Beranda - ' . $siteName)
 
 @section('content')
-<!-- Hero Section (Cyber Dark Neo-Brutalist) -->
-<section class="relative bg-[#1e1b4b] text-white py-20 lg:py-28 border-b-5 border-black overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Hero Section (Cyber Dark Neo-Brutalist Animated) -->
+<section class="relative bg-[#1e1b4b] text-white py-20 lg:py-28 border-b-5 border-black overflow-hidden select-none">
+    
+    <!-- Cyber Grid Background Overlay -->
+    <div class="absolute inset-0 cyber-grid-bg opacity-30 pointer-events-none"></div>
+
+    <!-- Ambient Glow Orbs -->
+    <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#8b5cf6]/20 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+    <div class="absolute -bottom-20 right-10 w-72 h-72 bg-[#f59e0b]/15 rounded-full blur-2xl pointer-events-none animate-float-slow"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="max-w-4xl mx-auto text-center space-y-6">
-            <!-- Badge Tag -->
-            <div class="inline-flex items-center gap-2 brutal-badge bg-[#8b5cf6] text-white px-4 py-2 text-xs font-black">
-                <span>⚡</span>  • POLITEKNIK NEGERI BALI
+            <!-- Badge Tag with Bounce Icon -->
+            <div class="inline-flex items-center gap-2 brutal-badge bg-[#8b5cf6] text-white px-4 py-2 text-xs font-black animate-hero-pop hover:scale-105 transition-transform duration-200">
+                <span class="animate-bounce inline-block text-yellow-300">⚡</span> • POLITEKNIK NEGERI BALI
             </div>
 
-            <!-- Main Heading -->
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white leading-none">
-                GALLERY KELAS <br class="hidden sm:inline">
-                <span class="bg-[#f59e0b] text-black px-4 py-1 border-4 border-black inline-block shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] mt-2">
+            <!-- Main Heading with Typewriter Animation & Floating Box -->
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white leading-tight animate-hero-pop">
+                <span id="typewriter-text" class="typewriter-cursor pr-2 inline-block text-white">GALLERY KELAS</span> <br class="hidden sm:inline">
+                <span class="bg-[#f59e0b] text-black px-4 py-2 border-4 border-black inline-block shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[10px_10px_0px_0px_rgba(139,92,246,1)] mt-3 animate-float-slow hover:scale-105 hover:-rotate-1 transition-all duration-300 cursor-pointer">
                     {{ $siteName }}
                 </span>
             </h1>
 
-            <p class="max-w-2xl mx-auto text-base sm:text-lg font-bold text-gray-200 bg-[#0f172a] p-6 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] leading-relaxed">
+            <!-- Animated Description Box -->
+            <p class="max-w-2xl mx-auto text-base sm:text-lg font-bold text-gray-200 bg-[#0f172a] p-6 border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:border-[#8b5cf6] hover:shadow-[8px_8px_0px_0px_rgba(139,92,246,1)] transition-all duration-300 leading-relaxed animate-hero-pop">
                 {{ $siteDesc }}
             </p>
 
-            <!-- Action Buttons -->
-            <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
-                <a href="{{ route('gallery') }}" class="brutal-btn brutal-btn-primary px-8 py-4 text-base">
-                    🚀 JELAJAHI GALERI MEDIA
+            <!-- Animated Action Button -->
+            <div class="flex flex-wrap items-center justify-center gap-4 pt-4 animate-hero-pop">
+                <a href="{{ route('gallery') }}" class="brutal-btn brutal-btn-primary px-8 py-4 text-base group hover:scale-105 active:scale-95 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-200">
+                    <span class="animate-rocket group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform mr-2">🚀</span> JELAJAHI GALERI MEDIA
                 </a>
             </div>
 
@@ -205,7 +214,7 @@
                         "google_drive_id" => $m->google_drive_id,
                         "album_name" => $m->album->name ?? "Umum"
                     ])) }}, {{ $index }})'
-                    class="brutal-card relative h-56 sm:h-64 cursor-pointer overflow-hidden group bg-black">
+                    class="brutal-card relative h-52 sm:h-64 cursor-pointer overflow-hidden group bg-black active:scale-98 transition-all">
                         
                         <img src="{{ route('media.thumbnail', $item->id) }}" alt="{{ $item->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90 group-hover:opacity-100">
 
@@ -242,4 +251,49 @@
         @endif
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const target = document.getElementById('typewriter-text');
+        if (!target) return;
+
+        const phrases = ["GALLERY KELAS", "DOKUMENTASI KELAS", "MEMORI KELAS", "ARSIP KELAS"];
+        let phraseIdx = 0;
+        let charIdx = phrases[0].length;
+        let isDeleting = false;
+        let speed = 100;
+
+        function typeLoop() {
+            const current = phrases[phraseIdx];
+
+            if (isDeleting) {
+                target.innerText = current.substring(0, charIdx - 1);
+                charIdx--;
+                speed = 45;
+            } else {
+                target.innerText = current.substring(0, charIdx + 1);
+                charIdx++;
+                speed = 90;
+            }
+
+            if (!isDeleting && charIdx === current.length) {
+                speed = 2400; // Pause when word is completely typed out
+                isDeleting = true;
+            } else if (isDeleting && charIdx === 0) {
+                isDeleting = false;
+                phraseIdx = (phraseIdx + 1) % phrases.length;
+                speed = 300;
+            }
+
+            setTimeout(typeLoop, speed);
+        }
+
+        // Wait initial 2.5 seconds before starting typing cycle
+        setTimeout(() => {
+            isDeleting = true;
+            typeLoop();
+        }, 2500);
+    });
+</script>
 @endsection
+

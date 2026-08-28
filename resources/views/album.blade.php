@@ -70,7 +70,7 @@
                         "google_drive_id" => $m->google_drive_id,
                         "album_name" => $album->name
                     ])) }}, {{ $index }})'
-                    class="brutal-card relative h-56 sm:h-64 cursor-pointer overflow-hidden group bg-black">
+                    class="brutal-card relative h-52 sm:h-64 cursor-pointer overflow-hidden group bg-black active:scale-98 transition-all">
                         
                         <img src="{{ route('media.thumbnail', $item->id) }}" alt="{{ $item->name }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90 group-hover:opacity-100">
 

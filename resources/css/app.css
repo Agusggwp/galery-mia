@@ -160,3 +160,90 @@
   padding: 0.25rem 0.65rem;
   font-size: 0.75rem;
 }
+
+/* Mobile Touch Optimization */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touch-pan-y {
+  touch-action: pan-y;
+}
+
+/* ==========================================================================
+   CYBER NEO-BRUTALIST HERO ANIMATIONS
+   ========================================================================== */
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+@keyframes brutal-pulse-shadow {
+  0%, 100% {
+    box-shadow: 6px 6px 0px #000000;
+  }
+  50% {
+    box-shadow: 10px 10px 0px #8b5cf6;
+  }
+}
+
+@keyframes hero-pop-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  70% {
+    transform: translateY(-4px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes rocket-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(6deg); }
+}
+
+.animate-hero-pop {
+  animation: hero-pop-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float-slow {
+  animation: float-slow 4s ease-in-out infinite;
+}
+
+.animate-brutal-pulse {
+  animation: brutal-pulse-shadow 3s infinite ease-in-out;
+}
+
+.animate-rocket {
+  display: inline-block;
+  animation: rocket-float 2.5s ease-in-out infinite;
+}
+
+.cyber-grid-bg {
+  background-image: radial-gradient(rgba(139, 92, 246, 0.25) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { 
+    border-color: #8b5cf6;
+    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.9));
+  }
+  50% { 
+    border-color: transparent;
+    filter: drop-shadow(0 0 0px transparent);
+  }
+}
+
+.typewriter-cursor {
+  border-right: 6px solid #8b5cf6;
+  animation: cursor-blink 0.7s step-end infinite;
+}
+
+
+
